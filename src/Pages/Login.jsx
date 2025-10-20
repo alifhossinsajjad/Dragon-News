@@ -6,11 +6,14 @@ import { toast } from 'react-toastify';
 
 const Login = () => {
 
-    const { logInUser } = use(Authcontex);
+    const { logInUser, } = use(Authcontex);
     const [showPassword, setShowPassword] = useState(false)
 
+    const [error, setError] = useState('')
+
     const location = useLocation()
-    const navigate = useNavigate();
+    console.log(location);
+    const navigate = useNavigate()
 
 
 
@@ -26,12 +29,18 @@ const Login = () => {
             .then((result) => {
                 console.log(result.user);
                 toast.success('LogIn successful')
+                // navigate (`${location.state ? location.state : '/'}`);
                 navigate(location?.state || '/')
+                
                 event.target.reset()
                 
             })
             .catch((error) => {
+                const errorCode = error.code;
                 console.log(error);
+                // toast.error('invalid yor email or password')
+
+                setError(errorCode)
                 
             })
 
@@ -51,13 +60,15 @@ const Login = () => {
                             <label className="label">Email</label>
                             <input type="email"
                             name='email'
-                            className="input" placeholder="Email" />
+                            className="input" placeholder="Email"
+                            required />
 
                             <div className="relative" >
                                 <label className="label">Password</label>
                                 <input type={showPassword ? 'text' : 'password'}
                                     name='password'
-                                    className="input" placeholder="Password" />
+                                    className="input" placeholder="Password" 
+                                    required/>
                                 <span
                                     onClick={handleShowPassord}
                                     className="absolute right-8 top-8 cursor-pointer z-50"
@@ -66,12 +77,17 @@ const Login = () => {
                                 </span>
                             </div>
                             <div><a className="link link-hover">Forgot password?</a></div>
+
+                            {error && <p className='text-red-600 mt-2'>Invalid Your emial/password</p>}
+
+
                             <button className="btn btn-neutral mt-4">Login</button>
                         </fieldset>
                     </form>
                 </div>
                 <p className='text-center'>Dont’t Have An Account ? <Link to={'/auth/register'} className='text-secondary'>Register</Link></p>
             </div>
+            
         </div>
     );
 };

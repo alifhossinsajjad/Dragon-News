@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 const Navbar = () => {
 
   const {user,logOut} = use(Authcontex);
+  console.log(user);
 
    const handleLogOut=()=> {
     logOut().then((result) => {
@@ -30,7 +31,7 @@ const Navbar = () => {
             <NavLink to={'/career'}>Career</NavLink>
            </div>
            <div className='login-btn flex gap-2'>
-            <img src={userIcon} alt="" />
+            <img src={`${user? user.photoURL : userIcon}`} alt="" />
             {
               user ? (<button onClick={handleLogOut} to={'/auth/login'} className='btn btn-primary px-8'>logOut</button>) : (<Link to={'/auth/login'} className='btn btn-primary px-8'>Login</Link>)
             }

@@ -5,8 +5,8 @@ const Header = () => {
     return (
         <div className='grid justify-center space-y-3'>
             <img src={logo} alt="" />
-            <p className='text-accent'>Journalism Without Fear or Favour</p>
-            <p className='font-semibold text-accent'>{format(new Date() ,"EEEE, MMMM MM , yyyy")}</p>
+            <p className='text-accent text-center'>Journalism Without Fear or Favour</p>
+            <p className='font-semibold text-accent text-center'>{format(new Date() ,"EEEE, MMMM MM , yyyy")}</p>
         </div>
     );
 };

@@ -4,17 +4,26 @@ import { toast } from 'react-toastify';
 import { FaEyeSlash, FaRegEye } from 'react-icons/fa';
 import { Authcontex } from '../Provider/AuthContext';
 
+
 const Register = () => {
 
-    const {createUser} = use(Authcontex);
+    const { createUser, setUser, updateUserProfile } = use(Authcontex);
     const [showPassowrd, setShowPassword] = useState(false)
 
+    // const [nameError, setNameError] = useState('');
 
     const handleRegister = (event) => {
         event.preventDefault();
         const email = event.target.email.value
         const password = event.target.password.value
         const name = event.target.name.value;
+        // if (nameError.length < 5) {
+        //     setNameError('your name should be at least 5 characters long');
+        //     return;
+        // }
+        // else {
+        //     setNameError('');
+        // }
         const photo = event.target.photo.value
         console.log('i am register', email, password, name, photo);
 
@@ -31,16 +40,36 @@ const Register = () => {
             .then((result) => {
                 console.log(result.user);
                 toast.success('account was create successfully')
-                event.target.reset()
+
+                const user = result.user;
+
+                updateUserProfile({ displayName: name, photoURL: photo })
+                .then(() => {
+                    setUser({ ...user, displayName: name, photoURL: photo });
+                    event.target.reset()
+
+                })
+                    .catch((error) => {
+                        console.log(error);
+                        // const errorCode = error.code;
+                        // console.log(error.code);
+                        toast.error('name or photo url not updated')
+                    })
+
+                // setUser(result.user);
+                // event.target.reset()
             })
             .catch((error) => {
                 console.log(error);
+                // const errorCode = error.code;
                 console.log(error.code);
                 toast.error('user already axist in database')
 
                 if (error.code === 'auth/email-already-in-us') {
                     toast.error('user already axist in database')
                 }
+
+                // setNameError(errorCode);
             })
 
 
@@ -64,6 +93,10 @@ const Register = () => {
                                 name='name'
                                 className="input" placeholder="Enter your name" />
 
+                            {/* {
+                                nameError && <p className='text-red-600 mt-2'>Your name should be 5 character long</p>
+                            } */}
+
                             {/* Photo */}
                             <label className="label">Photo Url</label>
                             <input type="text"
@@ -80,14 +113,14 @@ const Register = () => {
 
                             <div className="relative" >
                                 <label className="label">Password</label>
-                            <input type={showPassowrd ? 'text' : 'password'}
-                                name='password'
-                                className="input" placeholder="Password" />
+                                <input type={showPassowrd ? 'text' : 'password'}
+                                    name='password'
+                                    className="input" placeholder="Password" />
                                 <span
                                     onClick={handleShowPassord}
                                     className="absolute right-8 top-8 cursor-pointer z-50"
                                 >
-                                    {showPassowrd ? <FaRegEye/> : <FaEyeSlash/>}
+                                    {showPassowrd ? <FaRegEye /> : <FaEyeSlash />}
                                 </span>
                             </div>
                             <button className="btn btn-neutral mt-4">Register</button>
