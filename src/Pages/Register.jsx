@@ -1,5 +1,5 @@
 import React, { use, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { FaEyeSlash, FaRegEye } from 'react-icons/fa';
 import { Authcontex } from '../Provider/AuthContext';
@@ -9,7 +9,7 @@ const Register = () => {
 
     const { createUser, setUser, updateUserProfile } = use(Authcontex);
     const [showPassowrd, setShowPassword] = useState(false)
-
+    const navigate = useNavigate();
     // const [nameError, setNameError] = useState('');
 
     const handleRegister = (event) => {
@@ -25,7 +25,7 @@ const Register = () => {
         //     setNameError('');
         // }
         const photo = event.target.photo.value
-        console.log('i am register', email, password, name, photo);
+        // console.log('i am register', email, password, name, photo);
 
 
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -47,6 +47,8 @@ const Register = () => {
                 .then(() => {
                     setUser({ ...user, displayName: name, photoURL: photo });
                     event.target.reset()
+                    navigate('/');
+                    toast.success('name and photo url updated successfully')
 
                 })
                     .catch((error) => {

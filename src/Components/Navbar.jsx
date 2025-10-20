@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 const Navbar = () => {
 
   const {user,logOut} = use(Authcontex);
-  console.log(user);
+  // console.log(user);
 
    const handleLogOut=()=> {
     logOut().then((result) => {
